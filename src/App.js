@@ -1,5 +1,9 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
+import WelcomePage from "./components/WelcomePage";
+import EmployeesTable from "./components/EmployeesTable";
+import EmployeeForm from "./components/EmployeeForm";
 
 const countries = ["Lebanon", "Dubai", "UK", "Canada", "India", "Other"];
 
@@ -19,6 +23,7 @@ function App() {
     age: "",
     country: "",
   });
+  const [showPopup, setShowPopup] = useState(false);
 
   // Use effect
   useEffect(() => {
@@ -57,6 +62,7 @@ function App() {
         age: "",
         country: "",
       });
+      setShowPopup(false);
     } catch (error) {
       console.error("Error creating employee:", error);
     }
@@ -86,6 +92,7 @@ function App() {
     setUpdateForm({
       ...employee,
     });
+    setShowPopup(true);
   };
 
   const updateEmployee = async (e) => {
@@ -115,102 +122,42 @@ function App() {
         age: "",
         country: "",
       });
+      setShowPopup(false);
     } catch (error) {
       console.error("Error updating employee:", error);
     }
   };
 
+  const togglePopup = () => {
+    setShowPopup(!showPopup);
+  };
   return (
-    <div className="App">
+    <div className="container">
+      <WelcomePage />
       <div>
         <h2>Employees:</h2>
-        {employees &&
-          employees.map((employee) => (
-            <div key={employee._id}>
-              <h2>{employee.fullName}</h2>
-              <h5>{employee.email}</h5>
-              <h5>{employee.age}</h5>
-              <h5>{employee.country}</h5>
-              <button onClick={() => deleteEmployee(employee._id)}>
-                Delete Employee
-              </button>
-              <button onClick={() => toggleUpdate(employee)}>
-                Update Employee
-              </button>
-            </div>
-          ))}
+        {employees && (
+          <EmployeesTable
+            employees={employees}
+            handleEditEmployee={toggleUpdate}
+            handleDeleteEmployee={deleteEmployee}
+          />
+        )}
+        <button type="button" className="btn btn-primary" onClick={togglePopup}>
+          Add Employee
+        </button>
       </div>
 
-      {updateForm._id ? (
-        <div>
-          <h2>Update Employee</h2>
-          <form onSubmit={updateEmployee}>
-            <input
-              onChange={handleUpdateFieldChange}
-              value={updateForm.fullName}
-              name="fullName"
-              placeholder="Full Name"
-            />
-            <input
-              onChange={handleUpdateFieldChange}
-              value={updateForm.email}
-              name="email"
-              placeholder="Email"
-            />
-            <input
-              onChange={handleUpdateFieldChange}
-              value={updateForm.age}
-              name="age"
-              placeholder="Age"
-            />
-            <select
-              onChange={handleUpdateFieldChange}
-              value={updateForm.country}
-              name="country"
-            >
-              {countries.map((country) => (
-                <option key={country} value={country}>
-                  {country}
-                </option>
-              ))}
-            </select>
-            <button type="submit">Update Employee</button>
-          </form>
-        </div>
-      ) : (
-        <div>
-          <h2>Create Employee</h2>
-          <form onSubmit={createEmployee}>
-            <input
-              onChange={updateCreateFormField}
-              value={createForm.fullName}
-              name="fullName"
-            />
-            <input
-              onChange={updateCreateFormField}
-              value={createForm.email}
-              name="email"
-            />
-            <input
-              onChange={updateCreateFormField}
-              value={createForm.age}
-              name="age"
-            />
-            <select
-              onChange={updateCreateFormField}
-              value={createForm.country}
-              name="country"
-            >
-              <option value="">Select Country</option>
-              {countries.map((country) => (
-                <option key={country} value={country}>
-                  {country}
-                </option>
-              ))}
-            </select>
-            <button type="submit">Create Employee</button>
-          </form>
-        </div>
+      {showPopup && (
+        <EmployeeForm
+          formValues={updateForm._id ? updateForm : createForm}
+          handleSubmit={updateForm._id ? updateEmployee : createEmployee}
+          handleChange={
+            updateForm._id ? handleUpdateFieldChange : updateCreateFormField
+          }
+          countries={countries}
+          togglePopup={togglePopup}
+        />
       )}
     </div>
   );
