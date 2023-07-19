@@ -149,16 +149,19 @@ function App() {
               onChange={handleUpdateFieldChange}
               value={updateForm.fullName}
               name="fullName"
+              placeholder="Full Name"
             />
             <input
               onChange={handleUpdateFieldChange}
               value={updateForm.email}
               name="email"
+              placeholder="Email"
             />
             <input
               onChange={handleUpdateFieldChange}
               value={updateForm.age}
               name="age"
+              placeholder="Age"
             />
             <select
               onChange={handleUpdateFieldChange}
