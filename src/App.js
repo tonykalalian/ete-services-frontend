@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+const countries = ["Lebanon", "Dubai", "UK", "Canada", "India", "Other"];
+
 function App() {
   // State
   const [employees, setEmployees] = useState(null);
@@ -125,7 +127,10 @@ function App() {
         {employees &&
           employees.map((employee) => (
             <div key={employee._id}>
-              <h3>{employee.fullName}</h3>
+              <h2>{employee.fullName}</h2>
+              <h5>{employee.email}</h5>
+              <h5>{employee.age}</h5>
+              <h5>{employee.country}</h5>
               <button onClick={() => deleteEmployee(employee._id)}>
                 Delete Employee
               </button>
@@ -155,11 +160,17 @@ function App() {
               value={updateForm.age}
               name="age"
             />
-            <input
+            <select
               onChange={handleUpdateFieldChange}
               value={updateForm.country}
               name="country"
-            />
+            >
+              {countries.map((country) => (
+                <option key={country} value={country}>
+                  {country}
+                </option>
+              ))}
+            </select>
             <button type="submit">Update Employee</button>
           </form>
         </div>
@@ -182,11 +193,18 @@ function App() {
               value={createForm.age}
               name="age"
             />
-            <input
+            <select
               onChange={updateCreateFormField}
               value={createForm.country}
               name="country"
-            />
+            >
+              <option value="">Select Country</option>
+              {countries.map((country) => (
+                <option key={country} value={country}>
+                  {country}
+                </option>
+              ))}
+            </select>
             <button type="submit">Create Employee</button>
           </form>
         </div>
