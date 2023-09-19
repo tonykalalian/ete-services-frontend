@@ -33,7 +33,7 @@ function App() {
   const fetchEmployees = async () => {
     try {
       // Fetch the employees
-      const res = await axios.get("http://localhost:3000/employee/list");
+      const res = await axios.get("https://ete-services-api.onrender.com/employee/list");
       setEmployees(res.data.employees);
     } catch (error) {
       console.error("Error fetching employees:", error);
@@ -52,7 +52,7 @@ function App() {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:3000/employee/post",
+        "https://ete-services-api.onrender.com/employee/post",
         createForm
       );
       setEmployees([...employees, res.data.employee]);
@@ -71,7 +71,7 @@ function App() {
   const deleteEmployee = async (_id) => {
     try {
       // Delete the employee
-      await axios.delete(`http://localhost:3000/employee/delete/${_id}`);
+      await axios.delete(`https://ete-services-api.onrender.com/employee/delete/${_id}`);
       // Update state
       const newEmployees = employees.filter((employee) => employee._id !== _id);
       setEmployees(newEmployees);
@@ -101,7 +101,7 @@ function App() {
       // Send the update request
       const { fullName, email, age, country, _id } = updateForm;
       const res = await axios.put(
-        `http://localhost:3000/employee/update/${_id}`,
+        `https://ete-services-api.onrender.com/employee/update/${_id}`,
         {
           fullName,
           email,
